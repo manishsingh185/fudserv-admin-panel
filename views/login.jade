@@ -1,0 +1,79 @@
+doctype html
+html
+  head
+    meta(charset='UTF-8')
+    title fudserv admin panel
+    // Stylesheet
+    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css', rel='stylesheet', integrity='sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u', crossorigin='anonymous')
+    link(href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', integrity='sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN', crossorigin='anonymous')
+    link(href='https://fonts.googleapis.com/css?family=Oleo+Script', rel='stylesheet')
+    link(href='https://fonts.googleapis.com/css?family=Roboto+Slab', rel='stylesheet')
+    link(href='stylesheets/style.css', rel='stylesheet')
+    // Javascript
+    script(src='https://code.jquery.com/jquery-3.1.1.min.js', integrity='sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=', crossorigin='anonymous')
+    script(src='http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js')
+    script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js', integrity='sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa', crossorigin='anonymous')
+    script(type='text/javascript').
+      jQuery(document).ready(function($){
+      $('#loginform').validate({
+      rules: {
+      username: {
+      required: true
+      },
+      password: {
+      required: true
+      }
+      },
+      highlight: function(element) {
+      $(element).closest('.form-group').addClass('has-error');
+      },
+      unhighlight: function(element) {
+      $(element).closest('.form-group').removeClass('has-error');
+      },
+      errorElement: 'span',
+      errorClass: 'help-block',
+      errorPlacement: function(error, element) {
+      if(element.parent('.input-group').length) {
+      error.insertAfter(element.parent());
+      } else {
+      error.insertAfter(element);
+      }
+      }
+      });
+      });
+  body.full
+    nav.navbar.navbar-default.navbar-fixed-top
+      .container
+        .navbar-header
+          button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar3')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#', style='color:#00B7FF') FUDSERV
+        #navbar3.navbar-collapse.collapse
+          ul.nav.navbar-nav
+          ul.nav.navbar-nav.navbar-right
+            li
+              a.navbar-brand(href='#', style="font-family: 'Roboto Slab', serif") Admin Panel
+    .container
+      .row(style='margin-top:20px')
+        .col-xs-12.col-sm-8.col-md-6.col-sm-offset-2.col-md-offset-3
+          form#loginform(role='form', action='/sign-in', method='post')
+            fieldset
+              h2(style='color:#00B7FF') Login
+              hr.colorgraph
+              script(type='text/javascript').
+               var errorflag = !{errorflag};
+               if(errorflag){
+               errormsg = '<div class="alert alert-danger">Username or password is incorrect</div>';
+               document.write(errormsg);
+               }
+              .form-group
+                input#username.form-control.input-lg(type='text', name='username', placeholder='Username')
+              .form-group
+                input#password.form-control.input-lg(type='password', name='password', placeholder='Password')
+              hr.colorgraph
+              .row
+                .col-xs-6.col-sm-6.col-md-6
+                  input.btn.btn-lg.btn-info.btn-block(type='submit', value='Login')

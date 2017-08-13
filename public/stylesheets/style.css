@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+
+body {
+  padding: 50px;
+  padding-top: 80px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+.colorgraph {
+  height: 2px;
+  border-top: 0;
+  background: #00B7FF;
+  border-radius: 5px;
+}
+
+.navbar-default {
+  border-color: #00B7FF;}
+
+.panel {
+  border-color: #00B7FF;}
+
+  
