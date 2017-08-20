@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var Usergrid = require('../config/usergrid');
 var express = require('express');
+var async = require('async');
 var apigee_bass_config = require('../config/properties').apigee_baas;
 var UsergridEntity = require('../node_modules/usergrid/lib/entity');
 var UsergridQuery = require('../node_modules/usergrid/lib/query');100
@@ -94,8 +95,8 @@ router.post('/fudserv-food-menus' , function(req, res, next) {
 				type: 'fudserv-food-menus',
 				menu_date: convertDatetoString(date),
 				menu_day: getWeekDayFromDate(date),
-		        menu_items: req.body.menu_items,
-		        menu_other_details: req.body.menu_other_details,
+		        menu_items: req.body[getWeekDayFromDate(date)+'_menu_items'],
+		        menu_other_details: req.body[getWeekDayFromDate(date)+'_menu_other_details'],
 		        menu_type: req.body.menu_type,
 		        week_end_date: convertDatetoString(week_end_date),
 		        week_start_date: convertDatetoString(week_start_date)
@@ -112,23 +113,44 @@ router.post('/fudserv-food-menus' , function(req, res, next) {
 		res.json(usergridResponse);
 	});*/
 	
-	entities.forEach(function(entity) {
-		insertInArray(entity);
+	async.eachSeries(entities, function(entity, done) {
+  		Usergrid.usingAuth(Usergrid.appAuth).POST(entity, function(error, usergridResponse, entity) {
+		if(error){
+			console.log("error : "  + error);
+		}
+		done();
+		});
+	}, function(err) {
+		var responsestring = "data uploaded successfully."
+  		if (err){
+			  console.log(err);
+			  responsestring = "Something went wrong with insert. please check console logs.";
+		  };
+  		res.json({"status" : responsestring});
 	});
 	
-	res.json({"status" : "data uploaded successfully."});
+	//res.json({"status" : "data uploaded successfully."});
 });
 
 router.get('/search-food-menus' , function(req, res, next) {
+	var weekstartdate =  new Date();
+	weekstartdate.setDate(weekstartdate.getDate() - (weekstartdate.getDay() - 1));
+
+	var weekenddate =  new Date();
+	weekenddate.setDate(weekstartdate.getDate() + 6);
+
 	var query = new UsergridQuery('fudserv-food-menus')
     .eq('menu_type', req.query.menu_type)
 	.and
-	.eq('menu_date' , convertDatetoString(new Date()));
+	.eq('week_start_date' , convertDatetoString(weekstartdate))
+	.and
+	.eq('week_end_date' , convertDatetoString(weekenddate));
 
 	Usergrid.usingAuth(Usergrid.appAuth).GET(query, function(error, usergridResponse) {
 		if(error){
 			console.log(error);
-		}		
+		}
+		console.log(usergridResponse);		
 		res.json(usergridResponse);
 	});	
 });

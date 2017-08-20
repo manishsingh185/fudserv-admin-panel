@@ -23,4 +23,15 @@ a {
 .panel {
   border-color: #00B7FF;}
 
+.form-control-inline {
+   width: 100%;
+   float:left;
+   margin-right: 5px;
+}
+
+.form-inline .form-control {
+    display: inline-block;
+    width: 100%;
+    vertical-align: middle;
+  }
   

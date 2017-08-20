@@ -32,7 +32,25 @@ html
       dateformat : true ,
       weekdayvalidator : true
       },
-      menu_items: {
+      Monday_menu_items: {
+      required: true
+      },
+      Tuesday_menu_items: {
+      required: true
+      },
+      Wednesday_menu_items: {
+      required: true
+      },
+      Thursday_menu_items: {
+      required: true
+      },
+      Friday_menu_items: {
+      required: true
+      },
+      Saturday_menu_items: {
+      required: true
+      },
+      Sunday_menu_items: {
       required: true
       }
       },
@@ -67,9 +85,13 @@ html
       submitHandler: function(form) {
       // do other stuff for a valid form
       $.get('/search-food-menus', $("#search_menu_form").serialize() , function(data) {
-      var result =  '<div class="panel"><h4 danger>No results found for this week .</h4>';
-      if(data.body.entities[0]){
-      var result = '<div class="panel"><table class="table table-striped"><tbody><tr><td>Menu Date</td><td>'+data.body.entities[0].menu_date+'</td></tr><tr><td>Menu Day</td><td>'+data.body.entities[0].menu_day+'</td></tr><tr><td>Menu Items</td><td>'+data.body.entities[0].menu_items+'</td></tr><tr><td>Menu Other Details</td><td>'+data.body.entities[0].menu_other_details+'</td></tr><tr><td>Menu Type</td><td>'+data.body.entities[0].menu_type+'</td></tr><tr><td>Week End Date</td><td>'+data.body.entities[0].week_end_date+'</td></tr><tr><td>Week Start Date</td><td>'+data.body.entities[0].week_start_date+'</td></tr></table></div>';
+      var result =  '<div class="panel"><h4 danger>No results found for this week .</h4></div>';
+      if(data.body.entities.length > 0){
+      result = '<div class="panel"><table class="table table-striped"><thead><tr><th>Weekday</th><th>Menu Items</th><th>Menu Other Items</th></tr></thead><tbody>';
+      for(var i = 0; data.body.entities.length > i ; i++){
+      result = result + '<tr><td>'+ data.body.entities[i].menu_day+'</td><td>'+ data.body.entities[i].menu_items+'</td><td>'+ data.body.entities[i].menu_other_details+'</td></tr>';
+      }
+      result = result + '</tbody></table></div>';
       }
       $('#results').html(result);
       });
@@ -118,22 +140,80 @@ html
               hr.colorgraph
               form#add_menu_form(role='form', name='add_menu_form', method='POST', action='')
                 .form-group
-                  label(for='menutype') Menu Type
+                  label(for='menutype') Menu Type*
                   select#menu_type.form-control(name='menu_type')
                     option(value='breakfast') Breakfast
                     option(value='lunch') Lunch
                     option(value='hitea') Hi-Tea
                     option(value='dinner') Dinner
                 .form-group
-                  label(for='week_start_date') Weekend Start Date
-                  input#week_start_date.form-control(type='text', name='week_start_date', placeholder='14-08-2017')
+                  label(for='week_start_date') Weekend Start Date*
+                  input#week_start_date.form-control(type='text', name='week_start_date', placeholder='DD-MM-YYYY')
                 .form-group
-                  label(for='menu_items') Menu Items
-                  input#menu_items.form-control(type='text', name='menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                  .col-sm-2
+                    label WeekDay
+                  .col-sm-6
+                    label Menu Items*
+                  .col-sm-4
+                    label Menu Other Details
                 .form-group
-                  label(for='menu_other_details') Menu Other Details
-                  input#menu_other_details.form-control(type='text', name='menu_other_details', placeholder='Free Coke with every meal')
-                button.btn.btn-info(type='submit') Add Menu
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Monday
+                   .form-group.col-sm-6
+                     input#Monday_menu_items.form-control(type='text', name='Monday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Monday_menu_other_details.form-control(type='text', name='Monday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Tuesday
+                   .form-group.col-sm-6
+                     input#Tuesday_menu_items.form-control(type='text', name='Tuesday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Tuesday_menu_other_details.form-control(type='text', name='Tuesday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Wednesday
+                   .form-group.col-sm-6
+                     input#Wednesday_menu_items.form-control(type='text', name='Wednesday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Wednesday_menu_other_details.form-control(type='text', name='Wednesday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Thursday
+                   .form-group.col-sm-6
+                     input#Thursday_menu_items.form-control(type='text', name='Thursday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Thursday_menu_other_details.form-control(type='text', name='Thursday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Friday
+                   .form-group.col-sm-6
+                     input#Friday_menu_items.form-control(type='text', name='Friday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Friday_menu_other_details.form-control(type='text', name='Friday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Saturday
+                   .form-group.col-sm-6
+                     input#Saturday_menu_items.form-control(type='text', name='Saturday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Saturday_menu_other_details.form-control(type='text', name='Saturday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  .form-inline.row
+                   .form-group.col-sm-2
+                     label Sunday
+                   .form-group.col-sm-6
+                     input#Sunday_menu_items.form-control(type='text', name='Sunday_menu_items', placeholder='Pancakes,Pizza,burger,Coke')
+                   .form-group.col-sm-4
+                     input#Sunday_menu_other_details.form-control(type='text', name='Sunday_menu_other_details', placeholder='Free Coke with every meal')
+                .form-group
+                  button.btn.btn-info(type='submit') Add Menu
             #searchmenu.tab-pane.fade
               h5(style='color:#00B7FF') Search Current Week Menu
               hr.colorgraph
